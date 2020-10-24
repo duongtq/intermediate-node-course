@@ -13,7 +13,6 @@ app.listen(port, ()=>{
 	console.log(`server is listening on port:${port}`)
 })
 
-// CREATE
 app.post('/users',(req,res)=>{
   User.create(
     {
@@ -35,7 +34,6 @@ app.post('/users',(req,res)=>{
 })
 
 app.route('/users/:id')
-// READ
 .get((req,res)=>{
   User.findById(req.params.id, (err, data) => {
     if (err) {
@@ -56,7 +54,6 @@ app.route('/users/:id')
     }
   });
 })
-// UPDATE
 .put((req,res)=>{
   User.findByIdAndUpdate(req.params.id, {
     name: req.body.newData.name,
@@ -86,7 +83,26 @@ app.route('/users/:id')
     }
   })
 })
-// DELETE
 .delete((req,res)=>{
-  // User.findByIdAndDelete()
+  User.findByIdAndDelete(
+    req.params.id,
+    (err, data) => {
+      if (err) {
+        res.json({
+          success: false,
+          message: err
+        });
+      } else if (!data) {
+        res.json({
+          success: false,
+          message: "Not Found"
+        });
+      } else {
+        res.json({
+          success: true,
+          data: data
+        });
+      }
+    }
+  );
 })
